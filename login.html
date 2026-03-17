@@ -63,27 +63,38 @@ function login(){
 
 var key = document.getElementById("key").value;
 
-firebase.database().ref("keys/"+key).once("value",function(snap){
+var device = localStorage.getItem("device");
 
-if(snap.exists()){
-
-var expire = snap.val().expire;
-
-if(Date.now() > expire){
-
-document.getElementById("status").innerHTML="KEY HẾT HẠN";
-
-}else{
-
-document.getElementById("status").innerHTML="LOGIN THÀNH CÔNG";
-
-window.location="/sensiprov2/index.html";
-
+if(!device){
+device = Math.random().toString(36).substring(2);
+localStorage.setItem("device",device);
 }
 
+firebase.database().ref("keys/"+key).once("value",function(snap){
+
+if(!snap.exists()){
+alert("KEY KHÔNG TỒN TẠI");
+return;
+}
+
+var data = snap.val();
+
+if(Date.now() > data.expire){
+alert("KEY HẾT HẠN");
+return;
+}
+
+if(data.device == "" || data.device == device){
+
+firebase.database().ref("keys/"+key+"/device").set(device);
+
+localStorage.setItem("login","true");
+
+window.location.href="index.html";
+
 }else{
 
-document.getElementById("status").innerHTML="KEY KHÔNG TỒN TẠI";
+alert("KEY ĐÃ ĐƯỢC DÙNG Ở THIẾT BỊ KHÁC");
 
 }
 
