@@ -200,7 +200,10 @@
             <input type="text" id="keyInput" placeholder="Nhập KEY truy cập...">
         </div>
         <button class="btn btn-primary" onclick="checkKey()">MỞ KHÓA PANEL</button>
-        <p style="text-align: center; margin-top: 15px; font-size: 11px; color: #555;">Bản quyền thuộc về KTIENXIOS</p>
+
+<hr style="margin:20px 0;border-color:#333">
+
+<p style="text-align: center; margin-top: 15px; font-size: 11px; color: #555;">Bản quyền thuộc về KTIENXIOS</p>       
     </div>
 
     <div class="container hidden" id="mainMenu" style="display: none;">
@@ -326,27 +329,36 @@
 
         // --- 2. KHỞI TẠO MENU ---
         function init() {
-            const sel = document.getElementById('deviceSelect');
-            
-            // Helper function tạo group
-            function addGroup(label, list, valueCode) {
-                let g = document.createElement('optgroup');
-                g.label = label;
-                list.forEach(d => {
-                    let opt = new Option(d, valueCode);
-                    g.appendChild(opt);
-                });
-                sel.appendChild(g);
-            }
 
-            addGroup("APPLE (Đời Cũ)", devices.iphoneOld, "IP_OLD");
-            addGroup("APPLE (Đời Mới)", devices.iphoneNew, "IP_NEW");
-            addGroup("SAMSUNG GALAXY", devices.samsung, "SAMSUNG");
-            addGroup("XIAOMI REDMI (Đời Cũ)", devices.redmiOld, "RED_OLD");
-            addGroup("XIAOMI REDMI (Đời Mới)", devices.redmiNew, "RED_NEW");
-            addGroup("OPPO (Đời Cũ)", devices.oppoOld, "OPPO_OLD");
-            addGroup("OPPO (Đời Mới)", devices.oppoNew, "OPPO_NEW");
-        }
+const sel = document.getElementById('deviceSelect');
+
+sel.innerHTML = ""; // xoá option cũ trước khi thêm mới
+
+function addGroup(label, list, valueCode) {
+
+let g = document.createElement('optgroup');
+g.label = label;
+
+list.forEach(d => {
+
+let opt = new Option(d, valueCode);
+g.appendChild(opt);
+
+});
+
+sel.appendChild(g);
+
+}
+
+addGroup("APPLE (Đời Cũ)", devices.iphoneOld, "IP_OLD");
+addGroup("APPLE (Đời Mới)", devices.iphoneNew, "IP_NEW");
+addGroup("SAMSUNG GALAXY", devices.samsung, "SAMSUNG");
+addGroup("XIAOMI REDMI (Đời Cũ)", devices.redmiOld, "RED_OLD");
+addGroup("XIAOMI REDMI (Đời Mới)", devices.redmiNew, "RED_NEW");
+addGroup("OPPO (Đời Cũ)", devices.oppoOld, "OPPO_OLD");
+addGroup("OPPO (Đời Mới)", devices.oppoNew, "OPPO_NEW");
+
+}
 
         // --- 3. LOGIC ĐĂNG NHẬP ---
         function checkKey(){
@@ -374,21 +386,17 @@ if(keys[key]){
 
 }else{
 
-    alert("Key không hợp lệ");
+let input = document.getElementById("keyInput");
+
+input.classList.add("shake-anim");
+
+setTimeout(()=>input.classList.remove("shake-anim"),300);
+
+alert("Key không hợp lệ");
 
 }
 
 }
-                document.getElementById('mainMenu').style.animation = 'fadeIn 0.5s';
-                init();
-            } else {
-                let inp = document.getElementById('passwordInput');
-                inp.classList.add('shake-anim');
-                inp.value = ""; // Xóa trắng ô nhập khi sai
-                inp.placeholder = "Sai mật khẩu!";
-                setTimeout(() => inp.classList.remove('shake-anim'), 500);
-            }
-        }
 
         // --- 4. CHUYỂN TAB ---
         function switchTab(tabName) {
@@ -414,7 +422,7 @@ if(keys[key]){
         }
 
         function confirmFollow() {
-            window.open("www.tiktok.com/@ktienxios", "_blank");
+            window.open("https://www.tiktok.com/@ktienxios", "_blank");
             closeModal();
             switchTab('boost');
         }
@@ -505,7 +513,23 @@ if(keys[key]){
         // Enter để đăng nhập
         document.getElementById("keyInput").addEventListener("keypress", function(event) {
     if (event.key === "Enter") checkKey();
+});
 
-    </script>
+window.onload = function(){
+
+let key = localStorage.getItem("currentKey");
+let keys = JSON.parse(localStorage.getItem("keys") || "{}");
+
+if(key && keys[key] && Date.now() < keys[key]){
+
+document.getElementById('loginScreen').style.display = 'none';
+document.getElementById('mainMenu').style.display = 'flex';
+
+init();
+
+}
+
+}
+</script>
 </body>
 </html>
