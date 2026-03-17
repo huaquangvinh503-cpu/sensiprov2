@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel - Tạo Key</title>
+<style>
+body{
+font-family:sans-serif;
+background:#0a0a12;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.box{
+background:#111;
+padding:25px;
+border-radius:10px;
+width:300px;
+}
+
+input,select,button{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:6px;
+}
+
+button{
+background:#00ff88;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h3>Tạo KEY</h3>
+
+<input id="keyName" placeholder="Tên key">
+
+<select id="time">
+<option value="1">1 giờ</option>
+<option value="24">1 ngày</option>
+<option value="168">7 ngày</option>
+<option value="720">30 ngày</option>
+</select>
+
+<button onclick="createKey()">Tạo KEY</button>
+
+<p id="result"></p>
+
+</div>
+
+<script>
+
+function createKey(){
+
+const name=document.getElementById("keyName").value
+const hour=document.getElementById("time").value
+
+const expire=Date.now()+(hour*60*60*1000)
+
+let keys=JSON.parse(localStorage.getItem("keys")||"{}")
+
+keys[name]=expire
+
+localStorage.setItem("keys",JSON.stringify(keys))
+
+document.getElementById("result").innerText="KEY: "+name
+
+}
+
+</script>
+
+</body>
+</html>
