@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Admin Panel - Tạo Key</title>
+<title>ADMIN PANEL</title>
 <style>
+
 body{
-font-family:sans-serif;
 background:#0a0a12;
 color:white;
+font-family:Arial;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -16,7 +16,7 @@ height:100vh;
 
 .box{
 background:#111;
-padding:25px;
+padding:30px;
 border-radius:10px;
 width:300px;
 }
@@ -33,6 +33,7 @@ button{
 background:#00ff88;
 font-weight:bold;
 }
+
 </style>
 </head>
 
@@ -40,18 +41,17 @@ font-weight:bold;
 
 <div class="box">
 
-<h3>Tạo KEY</h3>
+<h2>TẠO KEY</h2>
 
 <input id="keyName" placeholder="Tên key">
 
-<select id="time">
-<option value="1">1 giờ</option>
-<option value="24">1 ngày</option>
-<option value="168">7 ngày</option>
-<option value="720">30 ngày</option>
+<select id="keyTime">
+<option value="1">1 ngày</option>
+<option value="7">7 ngày</option>
+<option value="30">30 ngày</option>
 </select>
 
-<button onclick="createKey()">Tạo KEY</button>
+<button onclick="taoKey()">TẠO KEY</button>
 
 <p id="result"></p>
 
@@ -59,20 +59,22 @@ font-weight:bold;
 
 <script>
 
-function createKey(){
+function taoKey(){
 
-const name=document.getElementById("keyName").value
-const hour=document.getElementById("time").value
+let name = document.getElementById("keyName").value;
+let time = document.getElementById("keyTime").value;
 
-const expire=Date.now()+(hour*60*60*1000)
+let keys = JSON.parse(localStorage.getItem("keys") || "{}");
 
-let keys=JSON.parse(localStorage.getItem("keys")||"{}")
+let expire = Date.now() + (time * 86400000);
 
-keys[name]=expire
+let newKey = name + "-" + Math.random().toString(36).substring(2,7).toUpperCase();
 
-localStorage.setItem("keys",JSON.stringify(keys))
+keys[newKey] = expire;
 
-document.getElementById("result").innerText="KEY: "+name
+localStorage.setItem("keys", JSON.stringify(keys));
+
+document.getElementById("result").innerText = "KEY: " + newKey;
 
 }
 
