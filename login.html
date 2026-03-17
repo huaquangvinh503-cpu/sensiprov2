@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>KTIENXIOS VIP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+background:black;
+color:white;
+font-family:sans-serif;
+text-align:center;
+margin-top:100px;
+}
+
+input{
+padding:10px;
+font-size:18px;
+border-radius:10px;
+border:none;
+}
+
+button{
+padding:10px 20px;
+font-size:18px;
+border:none;
+border-radius:10px;
+background:red;
+color:white;
+margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>KTIENXIOS VIP</h1>
+
+<input id="key" placeholder="Nhập key">
+<br>
+<button onclick="login()">LOGIN</button>
+
+<p id="status"></p>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+
+var firebaseConfig = {
+apiKey: "AIzaSyA-pXdhQeNOTQzNC1WCHSDA6peEFvrlT2E",
+authDomain: "ktienxios-key.firebaseapp.com",
+databaseURL: "https://ktienxios-key-default-rtdb.asia-southeast1.firebasedatabase.app",
+projectId: "ktienxios-key",
+storageBucket: "ktienxios-key.firebasestorage.app",
+messagingSenderId: "913748148776",
+appId: "1:913748148776:web:20fddd8abb2582f3c86b1d"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+function login(){
+
+var key = document.getElementById("key").value;
+
+firebase.database().ref("keys/"+key).once("value",function(snap){
+
+if(snap.exists()){
+
+var expire = snap.val().expire;
+
+if(Date.now() > expire){
+
+document.getElementById("status").innerHTML="KEY HẾT HẠN";
+
+}else{
+
+document.getElementById("status").innerHTML="LOGIN THÀNH CÔNG";
+
+window.location="menu.html";
+
+}
+
+}else{
+
+document.getElementById("status").innerHTML="KEY KHÔNG TỒN TẠI";
+
+}
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
