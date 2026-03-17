@@ -84,7 +84,7 @@ alert("KEY HẾT HẠN");
 return;
 }
 
-if(data.device == "" || data.device == device){
+if(!data.device || data.device == device)
 
 firebase.database().ref("keys/"+key+"/device").set(device);
 
