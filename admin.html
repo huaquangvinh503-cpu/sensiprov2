@@ -1,80 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>ADMIN PANEL</title>
-<style>
-
-body{
-background:#0a0a12;
-color:white;
-font-family:Arial;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
-
-.box{
-background:#111;
-padding:30px;
-border-radius:10px;
-width:300px;
-}
-
-input,select,button{
-width:100%;
-padding:10px;
-margin-top:10px;
-border:none;
-border-radius:6px;
-}
-
-button{
-background:#00ff88;
-font-weight:bold;
-}
-
-</style>
+<title>ADMIN KEY</title>
 </head>
 
 <body>
 
-<div class="box">
+<button onclick="createKeys()">Tạo 100 Key</button>
 
-<h2>TẠO KEY</h2>
-
-<input id="keyName" placeholder="Tên key">
-
-<select id="keyTime">
-<option value="1">1 ngày</option>
-<option value="7">7 ngày</option>
-<option value="30">30 ngày</option>
-</select>
-
-<button onclick="taoKey()">TẠO KEY</button>
-
-<p id="result"></p>
-
-</div>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
 
-function taoKey(){
+const firebaseConfig = {
+apiKey: "APIKEY",
+authDomain: "PROJECT.firebaseapp.com",
+databaseURL: "DATABASE_URL",
+projectId: "PROJECT"
+};
 
-let name = document.getElementById("keyName").value;
-let time = document.getElementById("keyTime").value;
+firebase.initializeApp(firebaseConfig);
 
-let keys = JSON.parse(localStorage.getItem("keys") || "{}");
+function randomKey(){
+return "KTIEN-" + Math.random().toString(36).substring(2,8).toUpperCase();
+}
 
-let expire = Date.now() + (time * 86400000);
+function createKeys(){
 
-let newKey = name + "-" + Math.random().toString(36).substring(2,7).toUpperCase();
+for(let i=0;i<100;i++){
 
-keys[newKey] = expire;
+let key=randomKey();
 
-localStorage.setItem("keys", JSON.stringify(keys));
+firebase.database().ref("keys/"+key).set({
+device:"",
+expire:0
+});
 
-document.getElementById("result").innerText = "KEY: " + newKey;
+}
+
+alert("Đã tạo 100 key");
 
 }
 
